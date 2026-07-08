@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rashmitha G — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#111827;
+      --muted:#9aa4b2;
+      --accent:#fb923c;
+      --card:#0f1724;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:#e6eef6;line-height:1.5;}
+    header{
+      position:fixed;left:0;right:0;top:0;height:64px;background:rgba(6,10,18,0.8);
+      backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:1200;
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#071124}
+    nav{display:flex;gap:14px}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px;font-size:14px}
+    nav a:hover{color:var(--accent);background:rgba(255,255,255,0.02)}
+    .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer}
+    .hamburger div{width:25px;height:3px;background:var(--muted);border-radius:2px}
+    .mobile-nav{position:fixed;top:64px;right:0;width:200px;background:var(--panel);padding:20px;display:none;flex-direction:column;gap:10px;box-shadow:-4px 0 15px rgba(0,0,0,0.5);z-index:1300}
+    .mobile-nav a{color:var(--muted);padding:8px;display:block;border-radius:6px}
+    .mobile-nav a:hover{background:rgba(255,255,255,0.05);color:var(--accent)}
+    .mobile-nav.active{display:flex}
+
+    main{padding-top:100px;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+
+    section{background:var(--card);border-radius:12px;padding:32px;box-shadow:0 8px 20px rgba(0,0,0,0.6);opacity:0;transform:translateY(20px);transition:all 0.7s ease;}
+    section.visible{opacity:1;transform:translateY(0);}
+
+    .center-title{text-align:center;margin-bottom:20px}
+    .center-title h2{font-size:26px;color:var(--accent)}
+    .center-title p{color:var(--muted);margin-top:6px;}
+
+    .hero{display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:space-between}
+    .hero-content{flex:1;min-width:250px}
+    .hero h1{font-size:36px;margin-bottom:8px;}
+    .lead{color:var(--muted);margin-bottom:16px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{display:inline-block;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:600;border:1px solid rgba(255,255,255,0.04);transition:0.3s}
+    .btn.primary{background:var(--accent);color:#071124;border:none}
+    .btn.primary:hover{opacity:0.9}
+    .btn.ghost{color:var(--muted);background:transparent}
+    .btn.ghost:hover{background:rgba(255,255,255,0.05)}
+
+    .profile-card{text-align:center;flex:0 0 180px;padding:16px;border-radius:12px;background:rgba(255,255,255,0.05)}
+    .profile-pic{width:160px;height:160px;border-radius:16px;object-fit:cover;border:4px solid rgba(255,255,255,0.04);max-width:100%}
+    .fake-file{display:inline-block;padding:8px 12px;border-radius:8px;border:1px dashed rgba(255,255,255,0.06);cursor:pointer;color:var(--muted);margin-top:12px}
+
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .project{padding:16px;border-radius:12px;background:rgba(255,255,255,0.03);text-align:center;transition:transform 0.3s,box-shadow 0.3s}
+    .project:hover{transform:translateY(-6px);box-shadow:0 8px 20px rgba(251,146,60,0.3)}
+    .project-logo{width:50px;height:50px;object-fit:contain;margin-bottom:10px}
+
+    .cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:12px}
+    .cert-card{background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;text-align:center;transition:transform 0.3s}
+    .cert-card:hover{transform:translateY(-4px);box-shadow:0 6px 16px rgba(251,146,60,0.2)}
+    .cert-card img{max-width:100%;height:120px;object-fit:cover;border-radius:6px;margin-bottom:8px}
+
+    .badges{display:flex;flex-wrap:wrap;gap:10px}
+    .badge{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.05);color:var(--muted);font-size:13px}
+
+    .contact-form p{margin-bottom:12px}
+    a.contact-link{color:var(--accent);text-decoration:none}
+    a.contact-link:hover{text-decoration:underline}
+
+    @media(max-width:1024px){
+      .hero{flex-direction:column;align-items:center;text-align:center}
+      .hero-content{order:2;}
+      nav{display:none}
+      .hamburger{display:flex}
+    }
+    @media(max-width:600px){
+      .hero h1{font-size:28px}
+      .lead{font-size:14px}
+      .btn{padding:8px 12px;font-size:13px}
+      .project-logo{width:40px;height:40px}
+      .cert-card img{height:100px}
+    }
+
+    footer{text-align:center;color:var(--muted);margin-bottom:20px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">RGP</div>
+    <div>
+      <div style="font-weight:700">Rashmitha G Poojary</div>
+      <div style="font-size:12px;color:var(--muted)"> • MCA Graduate • </div>
+    </div>
+  </div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#projects">Projects</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#skills">Skills</a>
+    <a href="#research">Research Paper</a>
+    <a href="#contact">Contact</ael
+  </nav>
+  <div class="hamburger" id="hamburger">
+    <div></div><div></div><div></div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#projects">Projects</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#skills">Skills</a>
+    <a href="#research">Research Paper</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<main>
+  <!-- Hero Section -->
+  <section id="home">
+    <div class="hero">
+      <div class="hero-content">
+        <h1>Hello, I'm <span style="color:var(--accent)">Rashmitha G Poojary</span></h1>
+        <p class="lead">MCA Graduate • Open to IT Opportunities • Passionate About Technology & Continuous Learning</p>
+        <div class="actions">
+          <a class="btn primary" href="#contact">Hire Me</a>
+          <a class="btn ghost" href="C:\Resume\Rashmitha_G_MCA_Resume.pdf" target="_blank">Curriculum Vitae</a>
+        </div>
+      </div>
+      <aside class="profile-card">
+        <img id="profileImg" src="C:\Users\RACHANA\Downloads\RPortfolio\Rashmitha.jpeg" alt="Photo" class="profile-pic">
+        <input id="photoInput" type="file" accept="image/*" style="display:none">
+      </aside>
+    </div>
+  </section>
+
+  <!-- About Me Section -->
+<section id="about">
+  <div class="center-title">
+    <h2>About Me</h2>
+    <p>Passionate MCA Graduate with a strong interest in Software Development, Artificial Intelligence (AI), Machine Learning(ML), emerging technologies, and building innovative data-driven solutions.</p>
+  </div>
+  <div class="card">
+    <p> Hello! I'm <b>Rashmitha G</b>, an <b>MCA Graduate</b> passionate about technology and continuous learning. I have a strong interest in <b>Software Development, Artificial Intelligence (AI), Machine Learning(ML), and emerging technologies</b>. I enjoy solving real-world problems through innovative, technology-driven solutions and continuously expanding my technical expertise. </p>
+    <p> Throughout my academic journey, I gained hands-on experience with <b>Python, SQL, Excel, Power BI, HTML, CSS, JavaScript, and React</b>. I have worked on academic projects and internships that strengthened my skills in <b>software development, data analysis, data visualization, problem-solving, and application development</b>. </p>
+    <p> I am currently working as a <b>Customer Service Associate</b> at <b>Provimi Animal Nutrition India Pvt. Ltd, Cargill </b>, where I have developed strong communication, customer relationship management, problem-solving, and cross-functional collaboration skills while delivering quality customer support in a fast-paced environment. </p>
+    <p> I am open to opportunities in the IT industry where I can leverage my technical knowledge and professional experience, contribute to innovative projects, collaborate with talented teams, and continue growing as a technology professional while building impactful solutions. </p>
+  </div>
+</section>
+
+
+  <!-- Education Section -->
+  <section id="education">
+    <div class="center-title">
+      <h2>Education</h2>
+      <p>Academic background</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project">
+        <h3>St Aloysius (Deemed to be University) - AIMIT, Mangaluru</h3>
+        <p>MCA | 2024 - 2026</p>
+        <p>GPA: 8.43 CGPA </p>
+      </div>
+      <div class="project">
+        <h3>Shri Bhuvanendra College, Karkala</h3>
+        <p>BCA | 2021 - 2024</p>
+        <p>GPA: 8.58 CGPA </p>
+      </div>
+      <div class="project">
+        <h3>Amratha Bharathi PU College, Mithilanagar, Hebri</h3>
+        <p>PCMCs(Science) | 2019 - 2021</p>
+        <p>Percentage: 79.66%</p>
+      </div>
+      <div class="project">
+        <h3>Karnataka Public School, Muniyal</h3>
+        <p>SSLC | 2019 </p>
+        <p>Percentage: 81.28%</p>
+      </div>
+    </div>
+  </section>
+
+<!-- Internships Section -->
+<section id="projects">
+  <div class="center-title">
+    <h2>Experience</h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project">
+      <h3>Customer Service Associate</h3>
+        <p>Provimi Animal Nutrition India Pvt. Ltd, Cargill, Bangalore.</p>
+        <!-- Centered Badges -->
+        <div class="badges center-badges">
+          <span class="badge">Tracking shipments and resolving discrepanciesMaintaining strong customer relationships</span>
+          <span class="badge">Maintaining strong customer relationships</span>
+       </div>
+       <a class="btn primary" href="https://www.linkedin.com/in/rashmitha-g04" target="_blank">
+        👁 View
+      </a>
+    </div>
+
+    <div class="projects-grid">
+    <div class="project">
+    <h3>AI/ML Intern</h3>
+      <p>Nyeras EduTech and Innovation Pvt Ltd, Bangalore</p>
+      <!-- Centered Badges -->
+      <div class="badges center-badges">
+        <span class="badge">Artificial Intelligence</span>
+        <span class="badge">Machine Learning</span>
+      </div>
+      <a class="btn primary" href="C:\Nyeras Internship\Rashmitha G.pdf" target="_blank">
+        👁 View
+      </a>
+    </div>
+    <div class="projects-grid">
+    <div class="project">
+    <h3>Data Analyst Intern (1 Month)</h3>
+      <p>Code Lab Systems, Bavutagudda, Mangalore.</p>
+      <!-- Centered Badges -->
+      <div class="badges center-badges">
+        <span class="badge">Power BI</span>
+        <span class="badge">Python</span>
+      </div>
+      <a class="btn primary" href="https://drive.google.com/file/d/1Z_uN8a4y8fRnHoAFJYzhYmFilIxqvONm/view?usp=drivesdk" target="_blank">
+        👁 View
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Center badges inside project cards */
+  .center-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .badge {
+    background: #1e293b; /* dark slate */
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background 0.3s;
+  }
+  .badge:hover {
+    background: #3b82f6; /* blue on hover */
+  }
+</style>
+
+
+  <!-- Projects Section -->
+<section id="projects">
+  <div class="center-title">
+    <h2>Projects</h2>
+    <p>Selected works</p>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project">
+      
+      <h3>Smart Grid Management System</h3>
+      <p>Developed a Smart Grid Energy Management System for real-time electricity monitoring, demand analysis, prediction, and automated billing. Built interactive dashboards, implemented energy forecasting using environmental parameters, and created secure modules for customer management, billing, and data visualization to support efficient grid operations.</p>
+      <div class="badges">
+        <span class="badge">AI</span><span class="badge">ML</span><span class="badge">Django</span>
+      </div>
+      <a class="btn primary" href="C:\Nyeras Internship\Smart _Grid_Mgt.pdf" target="_blank" class="github-link">🔗 View Documentation</a>
+    </div>
+
+    <div class="project">
+      
+      <h3>Hand Gesture Recognition</h3>
+      <p>A system that detects and interprets hand gestures in real-time using Mediapipe for hand landmark detection and a Random Forest classifier for gesture recognition. The project enables accurate, real-time gesture-based interaction, which can be applied in human-computer interfaces, virtual controls, and assistive technologies..</p>
+      <div class="badges">
+        <span class="badge">Computer Vision</span>
+        <span class="badge">OpenCV</span>
+        <span class="badge">Mediapipe</span>
+      </div>
+      <a class="btn primary" href="https://github.com/Rashmitha04-code/gesture" target="_blank" class="github-link">🔗 View on GitHub</a>
+    </div>
+
+    <div class="project">
+      
+      <h3>DreamDwell – AI-Powered Smart House Recommender </h3>
+      <p>Developed a Machine Learning-based property price prediction system using Random Forest Regression. Built an interactive Streamlit application with data visualizations and personalized home recommendations based on user preferences and Scikit-learn.</p>
+      <div class="badges">
+        <span class="badge">Pandas & NumPy</span>
+        <span class="badge">Scikit-learn</span>
+        <span class="badge">Streamlit</span>
+      </div>
+      <a class="btn primary" href="C:\Project\BB\Rashmitha_Report.pdf" target="_blank" class="github-link">🔗 View Documentation</a>
+    </div>
+
+  
+    <div class="project">
+      
+      <h3>TechTrove:An e-commerce platform for buying electronics and gadgets easily and securely.</h3>
+      <p>An E-commerce platform specializing in electronic devices and gadgets. Users can browse, select, and purchase a wide range of electronics, with a streamlined interface and secure payment options. Built to provide a focused shopping experience for tech enthusiasts, combining convenience, reliability, and a user-friendly design..</p>
+      <div class="badges">
+        <span class="badge">MERN Stack (MongoDB, Express.js, React.js, Node.js)</span><span class="badge">Full-Stack Development</span><span class="badge">E-commerce Platform</span>
+      </div>
+      <a class="btn primary" href="https://github.com/Rashmitha04-code/techtrove" target="_blank" class="github-link">🔗 View on GitHub</a>
+    </div>
+
+    <div class="project">
+      
+      <h3>Restaurant Website (Group Project)</h3>
+      <p>Developed by a team of three using the MERN Stack, this web application allows users to browse restaurants, select chefs, and place orders. Focused on delivering a simple, interactive food-ordering experience.</p>
+      <div class="badges">
+        <span class="badge">MERN Stack (MongoDB, Express.js, React.js, Node.js)</span><span class="badge">Full-Stack Development</span>
+      </div>
+      <a class="btn primary" href="https://github.com/Rashmitha04-code/restaurant" target="_blank" class="github-link">🔗 View on GitHub</a>
+    </div>
+    <div class="project">
+      
+      <h3>AI Chatbot</h3>
+      <p>An AI-driven chatbot that processes natural language input and provides responses in real-time voice format. Built using advanced NLP techniques and text-to-speech (TTS) technology, it delivers a conversational experience that mimics human-like interaction, making it suitable for customer support, virtual assistance, and interactive applications..</p>
+      <div class="badges">
+        <span class="badge">NLP</span><span class="badge">JavaScript</span>
+      </div>
+      <a class="btn primary" href="https://github.com/Rashmitha04-code/ai-chatbot" target="_blank" class="github-link">🔗 View on GitHub</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CSS for GitHub link button -->
+<style>
+.github-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: #24292e;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+.github-link:hover {
+  background: #0366d6;
+}
+</style>
+
+
+  <!-- Certifications Section -->
+<section id="certifications">
+  <div class="center-title">
+    <h2>Certifications</h2>
+    <p>Courses and achievements with direct links.</p>
+  </div>
+  <div class="cert-grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>Artificial Intelligence</h3></strong></p>
+      <p>Learned AI concepts and practical implementations in Python.</p>
+      <a class="btn primary" href="https://drive.google.com/drive/folders/1Xg62dRqNRl83y-P8wxE_6Cx6mSy3x4IM" target="_blank">
+        👁 View
+      </a>
+    </div>
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>Python</h3></strong></p>
+      <p>Completed a comprehensive Python programming course for data analysis and automation.</p>
+      <a class="btn primary" href="https://drive.google.com/drive/folders/1XmyLmbTDopa_6VnIPElHWta1y5ArRnYd" target="_blank">👁 View</a>
+    </div>
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>Swayam</h3></strong></p>
+      <p>Attended online courses from Swayam to enhance technical and academic skills.</p>
+      <a class="btn primary" href="https://drive.google.com/drive/folders/1Xn4DQ1fha93REqk6NranWxD89Td2YZRI" target="_blank">👁 View</a>
+    </div>
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>Cloud Computing</h3></strong></p>
+      <p>Gained practical knowledge on cloud platforms and deployment of applications.</p>
+      <a class="btn primary" href="https://drive.google.com/drive/folders/1XqGV7Ra5pCBRMYxsY1dY1fpj9S1uwr5b" target="_blank">👁 View</a>
+    </div>
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>Data Analytics</h3></strong></p>
+      <p>Learned to analyze datasets, generate insights, and visualize data effectively.</p>
+      <a class="btn primary" href="https://drive.google.com/drive/folders/1XxVOVe0JZftnFzXRXrhLSACslE1f5MOc" target="_blank">👁 View</a>
+    </div>
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>Cyber Security</h3></strong></p>
+      <p>Studied security concepts, network protection, and ethical hacking basics.</p>
+      <a class="btn primary" href="https://drive.google.com/drive/folders/1XxYtyVd2BQXLcyr48GNoRPY_Fq-slFzY" target="_blank">👁 View</a>
+    </div>
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>Workshop</h3></strong></p>
+      <p>Participated in workshops to enhance hands-on experience in technology projects.</p>
+      <a class="btn primary" href="https://drive.google.com/drive/folders/1Y5HK2tZmaWoOYe95EMyaK6C136-DUkG7" target="_blank">👁 View</a>
+    </div>
+    <div class="cert-card" style="padding:20px;">
+      <p><strong><h3>SQL</h3></strong></p>
+      <p>Learned database management, queries, and data manipulation using SQL.</p>
+      <a class="btn primary" href="https://drive.google.com/file/d/1zU4obM4xP6Yi9dxGKGBlsqPiGKs1piG1/view?usp=drivesdk" target="_blank">👁 View</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Ensure grid is responsive */
+  @media (max-width:1200px) {
+    .cert-grid {
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+  @media (max-width:800px) {
+    .cert-grid {
+      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    }
+  }
+  .cert-card {
+    background: rgba(255,255,255,0.03);
+    border-radius:12px;
+    text-align:center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .cert-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(251,146,60,0.3);
+  }
+  .btn.primary {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:8px 14px;
+    margin-top:10px;
+  }
+</style>
+
+
+  <!-- Skills Section -->
+<section id="skills">
+  <div class="center-title">
+    <h2>Skills</h2>
+    <p>Technical skills and tools I specialize in.</p>
+  </div>
+  <div class="skills-grid">
+    
+    <div class="skill-card">
+      
+      <h3>HTML</h3>
+      <p>Proficient in creating structured, semantic, and accessible web pages.</p>
+    </div>
+    
+    <div class="skill-card">
+      
+      <h3>CSS3</h3>
+      <p>Skilled in designing responsive and visually appealing web layouts.</p>
+    </div>
+    
+    <div class="skill-card">
+      
+      <h3>Python</h3>
+      <p>Experienced in programming, data analysis, and automation using Python.</p>
+    </div>
+    
+    <div class="skill-card">
+      
+      <h3>C</h3>
+      <p>Strong foundation in programming basics, memory management, and logic building.</p>
+    </div>
+    
+    <div class="skill-card">
+      
+      <h3>C++</h3>
+      <p>Knowledge in object-oriented programming and efficient problem-solving.</p>
+    </div>
+    
+    <div class="skill-card">
+      
+      <h3>JavaScript</h3>
+      <p>Ability to add interactivity, dynamic content, and functionality to web pages.</p>
+    </div>
+  
+  </div>
+</section>
+  <!-- Research Section -->
+<section id="research">
+    <div class="center-title">
+      <h2>Research Paper</h2>
+      <p>Research papers and publications</p>
+    </div>
+    <div class="projects-grid">
+    <div class="project">
+        <h4>Agronomic Crop-Match:Ensemble learning with Agro-Climatic features for Optimal Crop Suitability</h4>
+        <p>
+          This project presents a machine learning-based crop recommendation system that leverages ensemble techniques including Random Forest, XGBoost, LightGBM, and Gradient Boosting. By analyzing key parameters such as soil nutrients, pH, temperature, humidity, and rainfall, the model provides accurate crop suggestions. The system enhances prediction reliability and supports sustainable agriculture through data-driven decision-making.
+        </p>
+        <div class="badges">
+          <span class="badge">Research</span>
+          <span class="badge">Agriculture</span>
+          <span class="badge">AI/ML</span>
+        </div>
+        <a class="btn primary" href="C:\Project\Research-Paper\Research.pdf" target="_blank">👁 View Paper</a>
+        <a class="btn primary" href="C:\Portfolio\Certificate.jpeg" target="_blank">👁 View Certificate</a>
+      </div>
+    </div>
+  </section>
+
+
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width:1200px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width:768px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .skill-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .skill-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.3);
+  }
+  .skill-card h3 {
+    margin: 10px 0;
+    color: #f97316; /* orange highlight */
+  }
+  .skill-card p {
+    font-size: 14px;
+    color: #ddd;
+  }
+  .skill-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+  }
+</style>
+
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="center-title">
+      <h2>Get in Touch</h2>
+      <p>I am open to professional opportunities, collaborations, and meaningful conversations. Feel free to reach out to discuss potential projects, ideas, or ways we can connect and create value together6</p>
+    </div>
+    <div class="card">
+      <p>Email: <a class="contact-link" href="rashmithagpoojary2003@gmail.com">rashmithagpoojary2003@gmail.com</a></p>
+      <p>Phone: +91 7892072869 </p>
+      <p>LinkedIn: <a class="contact-link" href="https://www.linkedin.com/in/rashmitha-g04" target="_blank">https://www.linkedin.com/in/rashmitha-g04</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Rashmitha G • Portfolio Website</p>
+  </footer>
+</main>
+
+<script>
+  // Scroll animation
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('visible');}
+    });
+  }, {threshold:0.2});
+  sections.forEach(sec=>observer.observe(sec));
+
+  // Profile photo upload
+  const photoInput = document.getElementById('photoInput');
+  const profileImg = document.getElementById('profileImg');
+  photoInput.addEventListener('change', e=>{
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = ()=>profileImg.src = r.result;
+    r.readAsDataURL(f);
+  });
+
+  // Hamburger menu toggle
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click',()=> mobileNav.classList.toggle('active'));
+</script>
+</body>
+</html>
